@@ -1,0 +1,245 @@
+﻿@using CrmEarlyBound;
+@model IEnumerable<CrmEarlyBound.task01_meal02>
+
+<style>
+    .wrapper {
+        display: table;
+        margin: 0 auto;
+        padding-top: 100px;
+    }
+
+    .card1 {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 320px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 32px;
+        border-radius: 10px;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+        background-color: transparent;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: black;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+        position: relative;
+    }
+
+    .content .heading {
+        font-weight: 700;
+        font-size: 32px;
+        padding-top: 32px;
+        margin: 0 auto 24px;
+    }
+
+    .content .para {
+        line-height: 1.5;
+        font-size: 16px;
+    }
+
+    .content .btn {
+        color: #e8e8e8;
+        text-decoration: none;
+        padding: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .card1::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 5px;
+        background: white;
+        z-index: -1;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+
+    .card1:hover::before {
+        height: 100%;
+    }
+
+    .card1:hover {
+        box-shadow: none;
+    }
+
+    .card1:hover .circle {
+        border: 8px solid #f1f2f3;
+    }
+
+    p {
+        margin-bottom: 8px;
+        position: relative;
+    }
+
+    .img {
+        position: absolute;
+        left: -22px;
+        top: 5px;
+        width: 15px;
+        height: 15px;   
+    }
+
+    .circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+        position: absolute;
+        top: -70px;
+        overflow: hidden;
+        border: 8px solid #6c757d17;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+
+    .user-image {
+        width: 100px;
+        height: 100px;
+        position: relative;
+    }
+
+    .container-Card {
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 160px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+</style>
+
+<div class="col-9 col-md-10 text-center content">
+    <div class="container-Card">
+        <div class="col-md-12">
+            <div class="r1" style="padding-bottom: 0;">
+                <h3 style="padding-left: 33px; color:white">Order Details</h3>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="card1">
+                <div class="circle">
+                    <img src="~/assets/imgs/user.svg" alt="User Image" class="user-image">
+                </div>
+                <div class="content">
+                    <p class="heading"> @ViewBag.order.task01_name</p>
+                    <b>Total Cost Before Discount($):</b>
+                    <P>
+                        @{
+                            var cost = Convert.ToDecimal(String.Format("{0:0.00}", @ViewBag.order.task01_totalcostbeforediscount.Value));
+                        }
+                        @cost
+                    </P>
+                    <b>Discount(%):</b>
+                    <p>@ViewBag.order.task01_discount_002</p>
+                    <b>Total Cost After Discount($): </b>
+                    <p>@ViewBag.order.task01_totalcostafter.Value</p>
+                    <b> Order Status:</b>
+                    <p>@ViewBag.order.task01_orderstatus_002</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />          
+<table class="table">
+    <tr>
+        <th>
+            Meal Number
+        </th>
+        <th>
+            Meal Type
+        </th>
+        <th>
+            Item
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Cost
+        </th>
+        <th>
+            Edit
+        </th>
+        <th>
+            Delete
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_newid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_mealtype)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_price.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_quantity02)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.task01_totalcostpugin.Value)
+            </td>
+            <td>
+                @{
+                    if (ViewBag.order.task01_orderstatus_002.ToString() == CrmEarlyBound.task01_order_002_task01_orderstatus_002.Checkout.ToString())
+                    {
+                        <a href="@Url.Action("Edit", new { id = item.Id })" title="Edit" style=" opacity: 0.5; " class="prohibitionArea">
+                            <img src="@Url.Content("~/assets/imgs/edit.png")" alt="Edit" style="width: 20px; height: 20px; align-items: center" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Edit", new { id = item.Id })" title="Edit">
+                            <img src="@Url.Content("~/assets/imgs/edit.png")" alt="Edit" style="width: 20px; height: 20px; align-items: center" />
+                        </a>
+                    }
+                }
+
+            </td>
+            <td>
+
+                @{
+                    if (ViewBag.order.task01_orderstatus_002.ToString() == CrmEarlyBound.task01_order_002_task01_orderstatus_002.Checkout.ToString())
+                    {
+                        <a href="@Url.Action("Delete", new { id = item.Id })" title="Delete" style="opacity: 0.5;" class="prohibitionArea">
+                            <img src="@Url.Content("~/assets/imgs/delete.png")" alt="Delete" style="width: 20px; height: 20px; align-items: center" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Delete", new { id = item.Id })" title="Delete">
+                            <img src="@Url.Content("~/assets/imgs/delete.png")" alt="Delete" style="width: 20px; height: 20px; align-items: center" />
+                        </a>
+                    }
+                }
+
+            </td>
+        </tr>
+    }
+</table>

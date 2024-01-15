@@ -1,0 +1,38 @@
+﻿@model IEnumerable<CrmEarlyBound.task01_Food_02>
+
+
+<table class="table" id="mytable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Creation Date</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => item.task01_name)</td>
+                <td>@Html.DisplayFor(model => item.task01_price.Value)</td>
+                <td>@Html.DisplayFor(model => item.createdon, "{0:d}")</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.Id })" title="Edit">
+                        <img src="@Url.Content("~/assets/imgs/edit.png")" alt="Edit" style="width: 20px; height: 20px; align-items:center" />
+                    </a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", new { id = item.Id })" title="Delete">
+                        <img src="@Url.Content("~/assets/imgs/delete.png")" alt="Delete" style="width: 20px; height: 20px; align-items: center" />
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+

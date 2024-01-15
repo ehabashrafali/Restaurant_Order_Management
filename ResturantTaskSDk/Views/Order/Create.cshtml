@@ -1,0 +1,200 @@
+﻿@model CrmEarlyBound.task01_order_002
+
+
+
+<style>
+    .hidetd {
+        display: none;
+    }
+</style>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@using (Html.BeginForm("Create", "Order", FormMethod.Post, new { id = "FormID" }))
+{
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            Customer Name:
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.task01_name, new { htmlAttributes = new { @class = "form-control", Id = "task01_name", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.task01_name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            Discount (%):
+            <div class="form-group">
+                @Html.EditorFor(model => model.task01_discount_002, new { htmlAttributes = new { @class = "form-control", Id = "task01_discount_002" } })
+                @Html.ValidationMessageFor(model => model.task01_discount_002, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#exampleModal">Add Meal </button>
+        <br />
+        <!--Modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Meal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="FormID">
+                            <div class="form-group">
+                                <label for="foodId" class="col-form-label">Food Item:</label>
+                                @Html.DropDownList("foodId", ViewBag.foodId as SelectList, "Select Food", new { id = "foodId", @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Quantity:")
+                                <input type="number" id="quantity" name="quantity" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Meal Type:")
+                                @Html.DropDownListFor(model => model.Task01_Task01_Order_002_Task01_Meal02.First().task01_mealtype,
+                                     Enum.GetValues(typeof(CrmEarlyBound.task01_mealtype))
+                                         .Cast<CrmEarlyBound.task01_mealtype>()
+                                         .Select(item => new SelectListItem
+                                         {
+                                             Text = item.ToString(),
+                                             Value = (item).ToString()
+                                         }),
+                                     "Select Meal Type",
+                                     new
+                                     {
+                                         id = "mealType",
+                                         @class = "form-control",
+                                     }
+                                )
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+                        <button type="button" id="saveMealButton" class="btn btn-sm">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="mealTable" class="table">
+            <thead>
+                <tr>
+                    <th>Food Item</th>
+                    <th hidden>Food Id</th>
+                    <th>Quantity</th>
+                    <th>Meal Type</th>
+                </tr>
+            </thead>
+            <tbody class="mealTableBody">
+            </tbody>
+        </table>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="btn1" value="Check Out" name="Create" class="btn btn-sm" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    function showPreloader() {
+        $(".preloader").removeClass("hidden");
+    }
+
+    // Function to hide the preloader
+    function hidePreloader() {
+        $(".preloader").addClass("hidden");
+    }
+
+$(document).ready(function () {
+    $('#saveMealButton').click(function () {
+        var foodId = $('#foodId').val();
+        var quantity = $('#quantity').val();
+        var mealType = $('#mealType').val();
+        var selectedFoodText = $("#foodId option:selected").text();
+
+        // Ensure all required fields are filled
+        if (foodId && quantity && mealType) {
+            var newRow = '<tr>' +
+                '<td>' + selectedFoodText + '</td>' +
+                '<td class="hidetd">' + foodId + '</td>' +
+                '<td>' + quantity + '</td>' +
+                '<td>' + mealType + '</td>' +
+                '</tr>';
+
+            $('.mealTableBody').append(newRow);
+
+            // Clear form inputs after adding the meal
+            $('#foodId').val('');
+            $('#quantity').val('');
+            $('#mealType').val('');
+            $('#exampleModal').modal('hide');
+
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+
+    $('#FormID').submit(function (e) {
+        e.preventDefault();
+
+        // Gather order data
+        var orderData = {
+            task01_name: $('#task01_name').val(),
+            task01_discount_002: $('#task01_discount_002').val()
+        };
+        console.log(orderData);
+
+
+        // Gather meal data from the table
+        var mealsData = [];
+        $('.mealTableBody tr').each(function () {
+            var row = $(this);
+            var meal = {
+                "task01_item.Id": row.find('td:eq(1)').text(),
+                task01_quantity02: row.find('td:eq(2)').text(),
+                task01_mealtype: row.find('td:eq(3)').text()
+            };
+            mealsData.push(meal);
+        });
+
+
+        $.ajax({
+        url: '@Url.Action("Create", "Order")',
+        method: 'POST',
+        data: {
+            order: orderData,
+            meals: mealsData
+        },
+        beforeSend: function () {
+            showPreloader();
+        },
+        success: function () {
+            if (mealsData.length === 0) {
+                alert('Please add Meal/Meals');
+                window.location.reload();
+            } else {
+
+                window.location.href = '@Url.Action("Index", "Order")';
+            }
+        },
+        complete: function () {
+            hidePreloader();
+        }
+        });
+
+    });
+});
+
+</script>

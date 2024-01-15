@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CrmEarlyBound.task01_meal02>
+
+<table class="table" id="mytable">
+    <thead>
+        <tr>
+            <th>Meal Number</th>
+            <th>Meal Type</th>
+            <th>Creation Date</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Total Cost</th>
+            <th>Customer Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.task01_newid)</td>
+                <td>@Html.DisplayFor(modelItem => item.task01_mealtype)</td>
+                <td>@Html.DisplayFor(modelItem => item.createdon, "{0:d}")</td>
+                <td>@Html.DisplayFor(modelItem => item.task01_item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.task01_quantity02)</td>
+                <td>@Html.DisplayFor(modelItem => item.task01_totalcostpugin.Value)</td>
+                <td>@Html.DisplayFor(modelItem => item.task01_orderid002.Name)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />

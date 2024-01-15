@@ -1,0 +1,62 @@
+﻿@model CrmEarlyBound.task01_meal02
+
+<h2>Edit @Model.task01_newid Details</h2>
+
+@using (Html.BeginForm("Edit","Meal", FormMethod.Post, new {id = Model.task01_orderid002.Id}))
+{
+    @*@Html.AntiForgeryToken()*@
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        Meal Number:
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.task01_newid, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.task01_newid, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        Quantity:
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.task01_quantity02, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.task01_quantity02, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        Customer Name:
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.task01_orderid002.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.task01_orderid002.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        Meal Type:
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.task01_mealtype, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.task01_mealtype, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        Total Cost:
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.task01_totalcostpugin.Value, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.task01_totalcostpugin.Value, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Edit" class="btn btn-sm" />
+        </div>
+    </div>
+</div>
+}
+<br />
+<div>
+    @Html.ActionLink("Back to Order List", "Index", "Order", null, new { @class = "btn btn-sm" })
+</div>

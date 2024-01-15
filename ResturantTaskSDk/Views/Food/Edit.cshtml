@@ -1,0 +1,53 @@
+﻿@model CrmEarlyBound.task01_Food_02
+
+@{
+    ViewBag.Title = "Edit Food Item";
+}
+
+<h2>Edit @Model.task01_name Details</h2>
+
+@using (Html.BeginForm())
+{
+    @*@Html.AntiForgeryToken()*@
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        @Html.HiddenFor(model => model.task01_food_02id)
+
+        <div class="form-group">
+            Name:
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.task01_name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.task01_name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            Price:
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.task01_price.Value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.task01_price.Value, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            Creation Date:
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.createdon, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.createdon, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class = "btn btn-sm" />
+            </div>
+        </div>
+    </div>
+}
+<br />
+<div>
+    @Html.ActionLink("Back to Food List", "Index", null, new { @class = "btn btn-sm" })
+</div>
